@@ -1,34 +1,34 @@
-package br.com.fiap.springpgdeposito.resources;
-import br.com.fiap.springpgdeposito.entity.Deposito;
+package br.com.fiap.springpgdeposito.resource;
+
 import br.com.fiap.springpgdeposito.entity.Endereco;
 import br.com.fiap.springpgdeposito.repository.EnderecoRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
-import java.util.Objects;
+
 @RestController
 @RequestMapping(value = "/endereco")
 public class EnderecoResource {
+
     @Autowired
-    private EnderecoRepository enderecoRepository;
+    private EnderecoRepository repo;
+
     @GetMapping
-    public List<Endereco> findAll(){return enderecoRepository.findAll();}
+    public List<Endereco> findAll() {
+        return repo.findAll();
+    }
+
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Endereco> findById(@PathVariable(name = "id") Long id){
-        Endereco endereco = enderecoRepository.findById(id).orElse(null);
-        if (Objects.isNull(endereco)){
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(endereco);
+    public Endereco findById(@PathVariable Long id) {
+        return repo.findById(id).orElseThrow();
     }
 
     @PostMapping
     @Transactional
-    public ResponseEntity<Endereco> persist(@RequestBody Endereco endereco){
-        Endereco saved = enderecoRepository.save(endereco);
-        return ResponseEntity.ok(saved);
+    public Endereco save(@RequestBody Endereco endereco) {
+        return repo.save(endereco);
     }
 
 }

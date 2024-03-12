@@ -1,30 +1,32 @@
 package br.com.fiap.springpgdeposito.entity;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Entity
-@Table(name= "TB_PRODUTO")
+@Builder
+@Table(name="TB_ENDERECO")
 public class Endereco {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SQ_PRODUTO")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SQ_ENDERECO")
     @SequenceGenerator(
-            name= "SQ_PRODUTO",
-            sequenceName = "SQ_PRODUTO",
+            sequenceName = "SQ_ENDERECO",
+            name = "SQ_ENDERECO",
             initialValue = 1,
             allocationSize = 1
     )
-    @Column(name = "ID_PRODUTO")
-    private long id;
-    @Column(name = "CEP_PRODUTO")
+    @Column(name="ID_ENDERECO")
+    private Long id;
+
+    private String cep;
     private String numero;
-    @Column(name = "NUM_PRODUTO")
-    private String number;
-    @Column (name = "COM_PRODUTO")
-    private String sigla;
+    private String complemento;
+
 }

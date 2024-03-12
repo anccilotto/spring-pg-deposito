@@ -1,33 +1,47 @@
-package br.com.fiap.springpgdeposito.resources;
+package br.com.fiap.springpgdeposito.resource;
+
 import br.com.fiap.springpgdeposito.entity.Deposito;
+import br.com.fiap.springpgdeposito.entity.Endereco;
 import br.com.fiap.springpgdeposito.repository.DepositoRepository;
-import jakarta.transaction.Transactional;
+import br.com.fiap.springpgdeposito.repository.EnderecoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.Objects;
+
 @RestController
 @RequestMapping(value = "/deposito")
 public class DepositoResource {
+
     @Autowired
-    private DepositoRepository depositoRepository;
+    private DepositoRepository repo;
+
+    @Autowired
+    private EnderecoRepository enderecoRepo;
+
     @GetMapping
-    public List<Deposito> findAll(){return depositoRepository.findAll();}
+    public List<Deposito> findAll() {
+        return repo.findAll();
+    }
+
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Deposito> findById(@PathVariable(name = "id") Long id){
-        Deposito deposito = depositoRepository.findById(id).orElse(null);
-        if (Objects.isNull(deposito)){
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(deposito);
+    public Deposito findById(@PathVariable Long id) {
+        return repo.findById(id).orElseThrow();
     }
 
     @PostMapping
     @Transactional
-    public ResponseEntity<Deposito> persist(@RequestBody Deposito deposito){
-        Deposito saved = depositoRepository.save(deposito);
-        return ResponseEntity.ok(saved);
-    }
+    public Deposito save(@RequestBody Deposito deposito) {
 
+        if (Objects.isNull(deposito)) return null;
+
+        if (Objects.nonNull(deposito.getEndereco().getId())) {
+            Endereco endereco = enderecoRepo.findById(deposito.getEndereco().getId()).orElseThrow();
+            deposito.setEndereco(endereco);
+        }
+
+        return repo.save(deposito);
+    }
 }
