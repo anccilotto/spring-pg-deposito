@@ -1,4 +1,4 @@
-package br.com.fiap.springpgdeposito.resources;
+package br.com.fhuiap.springpgdeposito.resources;
 
-public class ProdutoResource {
+public class  {
 }
